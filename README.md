@@ -9,3 +9,7 @@ A journey of a fullstack app begins with a single index.html file.
 4. Have fun!
 
 The world is your oyster. Go forth and build cool stuff.
+
+## Resources
+- [HacktoberFest Site](https://hacktoberfest.digitalocean.com/faq)
+- [How To Create A Pull Request](https://help.github.com/en/articles/creating-a-pull-request)
