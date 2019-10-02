@@ -25,3 +25,9 @@ yarn ts-node
 import * as L from './src'
 // play with list functions
 ```
+
+## Tests
+
+```
+yarn test
+```
