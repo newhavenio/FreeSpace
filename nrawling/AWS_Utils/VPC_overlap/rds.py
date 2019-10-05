@@ -21,7 +21,10 @@ class RelationalDatabaseService:
 
     def get_rds(self):
         """Get information on RDS instances in a single region."""
-        return [{'DBInstanceIdentifier': rds['DBInstanceIdentifier']}
+        return [{'DBInstanceIdentifier': rds['DBInstanceIdentifier'],
+                 'DBInstanceClass': rds['DBInstanceClass'],
+                 'Engine': rds['Engine'],
+                 'EngineVersion': rds['EngineVersion']}
                 for rds in self.rds.describe_db_instances()['DBInstances']]
 
     def get_all_rds(self,accounts):
