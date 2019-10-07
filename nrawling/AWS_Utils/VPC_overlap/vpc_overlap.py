@@ -18,6 +18,7 @@ import click
 
 from accounts import OrgAccount
 from ec2 import ElasticComputeCloud
+from rds import RelationalDatabaseService
 
 SESSION = None
 ORGACCOUNT = None
@@ -104,6 +105,17 @@ def compute_overlaps():
                     'SecondVpcCidr': vpc2['CidrBlock']}]
 
     deliver_output(overlaps)
+
+
+@cli.command('fetch-rds')
+def fetch_rds():
+    """Retrieve RDS instances for accounts."""
+    global SESSION, ORGACCOUNT
+
+    accounts = ORGACCOUNT.get_accounts()
+    rds = RelationalDatabaseService(SESSION)
+
+    deliver_output(rds.get_all_rds(accounts))
 
 
 if __name__ == '__main__':
