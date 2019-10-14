@@ -27,3 +27,7 @@ Retrieve list of regions from EC2 service.
 ###fetch-vpcs
 
 Retrieve VPCs for accounts.
+
+###fetch-rds
+
+Retrieve RDS instances for accounts.
