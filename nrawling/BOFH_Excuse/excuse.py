@@ -9,8 +9,9 @@ def load_excuses():
     with open('excuses.txt') as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for row in readCSV:
-            excuses.append(row)
+            excuses.append(str(row))
     return(excuses)
 
 def random_excuse(excuses):
-    return random.choice(excuses)
+    excuse = str(random.choice(excuses))[1:-1]
+    return(excuse)
