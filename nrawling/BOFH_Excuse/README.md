@@ -14,7 +14,6 @@ Custom excuse entry UI
 
 ### Thanks
 
-Newhaven.io, for encourage Hackoctoberfest participation
-
-http://jonathansoma.com/tutorials/webapps/intro-to-flask/
-https://stackoverflow.com/questions/10666364/aws-dynamodb-pick-a-record-item-randomly
+* Newhaven.io, for encourage Hackoctoberfest participation
+* http://jonathansoma.com/tutorials/webapps/intro-to-flask/
+* https://stackoverflow.com/questions/10666364/aws-dynamodb-pick-a-record-item-randomly
