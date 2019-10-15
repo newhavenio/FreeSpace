@@ -4,8 +4,8 @@ Implemented in Python Flask
 
 ## Features
 
-Imports data from publicly available excuses.txt file
-Randomly selects an excuse for every occasion
+* Imports data from publicly available excuses.txt file
+* Randomly selects an excuse for every occasion
 
 ## Getting started
 
@@ -16,8 +16,8 @@ Randomly selects an excuse for every occasion
 
 ## Coming soon
 
-Serverless design (Lambda, DynamoDB, API Gateway)
-Custom excuse entry UI
+* Serverless design (Lambda, DynamoDB, API Gateway)
+* Custom excuse entry UI
 
 ### Thanks
 
