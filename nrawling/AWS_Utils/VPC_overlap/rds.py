@@ -15,25 +15,34 @@ class RelationalDatabaseService:
         self.rds = self.session.client('rds', region)
 
     def get_regions(self):
-        """Get available regions for current profile."""
+        """Get available regions for current profile. Recommend EC2 regions instead."""
         return [{'RegionName': region}
                 for region in self.session.get_available_regions('rds')]
 
     def get_rds(self):
         """Get information on RDS instances in a single region."""
-        return [{'DBInstanceIdentifier': rds['DBInstanceIdentifier'],
+        return [{
+                 'DBClusterIdentifier': rds.get('DBClusterIdentifier',''),
+                 'DBInstanceIdentifier': rds['DBInstanceIdentifier'],
                  'DBInstanceClass': rds['DBInstanceClass'],
+                 'AvailabilityZone': rds['AvailabilityZone'],
+                 'MultiAZ': rds['MultiAZ'],
                  'Engine': rds['Engine'],
-                 'EngineVersion': rds['EngineVersion']}
+                 'EngineVersion': rds['EngineVersion'],
+                 'AllocatedStorage': rds['AllocatedStorage'],
+                 'StorageType': rds['StorageType'],
+                 'StorageEncrypted': rds['StorageEncrypted'],
+                 'KmsKeyId': rds.get('KmsKeyId',''), }
                 for rds in self.rds.describe_db_instances()['DBInstances']]
 
-    def get_all_rds(self,accounts):
+    def get_all_rds(self,accounts,regions):
         """Get all RDS instances."""
         rds_list = []
 
         # Fetch regions once
-        regions = self.get_regions()
-        regions = [{'RegionName': 'us-east-1'}]
+        # https://github.com/boto/boto3/issues/2022
+        # Use the EC2 describe to check opt-in status for new regions
+        # regions = self.get_regions()
 
         # For each account, check for RDS instances in each region
         for account in accounts:
@@ -53,11 +62,13 @@ class RelationalDatabaseService:
             )
 
             for region in regions:
+#                print("Processing account: " + account['AccountId'] + ", region: " +
+#                        region['RegionName'] + "...")
                 loop_rds = RelationalDatabaseService(
                     account_session,
                     region['RegionName'])
                 for rds in loop_rds.get_rds():
-                    rds['AcocuntId']= account['AccountId']
+                    rds['AccountId']= account['AccountId']
                     rds['AccountName'] = account['AccountName']
                     rds['Region'] = region['RegionName']
                     rds_list.append(rds)

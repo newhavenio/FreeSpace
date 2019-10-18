@@ -113,9 +113,12 @@ def fetch_rds():
     global SESSION, ORGACCOUNT
 
     accounts = ORGACCOUNT.get_accounts()
+    ecc = ElasticComputeCloud(SESSION)
+    regions = ecc.get_regions()
+
     rds = RelationalDatabaseService(SESSION)
 
-    deliver_output(rds.get_all_rds(accounts))
+    deliver_output(rds.get_all_rds(accounts,regions))
 
 
 if __name__ == '__main__':
