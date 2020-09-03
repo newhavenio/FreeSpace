@@ -16,5 +16,14 @@ class OrgAccount:
 
     def get_accounts(self):
         """Get child accounts for current profile."""
-        return [{'AccountId': account['Id'], 'AccountName': account['Name']}
-                for account in self.org.list_accounts()['Accounts']]
+        accounts = []
+        response = self.org.list_accounts()
+        for account in response['Accounts']:
+            accounts = accounts + [{'AccountId': account['Id'], 'AccountName': account['Name']}]
+
+        while not (response.get('NextToken',None) is None):
+            response = self.org.list_accounts(NextToken=response['NextToken'])
+            for account in response['Accounts']:
+                accounts = accounts + [{'AccountId': account['Id'], 'AccountName': account['Name']}]
+
+        return accounts

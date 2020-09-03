@@ -49,28 +49,31 @@ class RelationalDatabaseService:
             # Should add a TRY block here
             # this assumes that the [default] profile has access to assume roles
             # NEED TO FIX
-            sts_client = boto3.client('sts')
-            assumed_role_object = sts_client.assume_role(
-                RoleArn="arn:aws:iam::"+account['AccountId']+":role/Admin",
-                RoleSessionName="AssumeRoleSession1")
-            credentials = assumed_role_object['Credentials']
+            try:
+                sts_client = boto3.client('sts')
+                assumed_role_object = sts_client.assume_role(
+                    RoleArn="arn:aws:iam::"+account['AccountId']+":role/Admin",
+                    RoleSessionName="AssumeRoleSession1")
+                credentials = assumed_role_object['Credentials']
 
-            account_session = boto3.Session(
-                aws_access_key_id=credentials['AccessKeyId'],
-                aws_secret_access_key=credentials['SecretAccessKey'],
-                aws_session_token=credentials['SessionToken'],
-            )
+                account_session = boto3.Session(
+                    aws_access_key_id=credentials['AccessKeyId'],
+                    aws_secret_access_key=credentials['SecretAccessKey'],
+                    aws_session_token=credentials['SessionToken'],
+                )
 
-            for region in regions:
-#                print("Processing account: " + account['AccountId'] + ", region: " +
-#                        region['RegionName'] + "...")
-                loop_rds = RelationalDatabaseService(
-                    account_session,
-                    region['RegionName'])
-                for rds in loop_rds.get_rds():
-                    rds['AccountId']= account['AccountId']
-                    rds['AccountName'] = account['AccountName']
-                    rds['Region'] = region['RegionName']
-                    rds_list.append(rds)
+                for region in regions:
+#                    print("Processing account: " + account['AccountId'] + ", region: " +
+#                            region['RegionName'] + "...")
+                    loop_rds = RelationalDatabaseService(
+                        account_session,
+                        region['RegionName'])
+                    for rds in loop_rds.get_rds():
+                        rds['AccountId']= account['AccountId']
+                        rds['AccountName'] = account['AccountName']
+                        rds['Region'] = region['RegionName']
+                        rds_list.append(rds)
+            except:
+                print("Could not assume role for account: " + account['AccountId'])
 
         return rds_list
