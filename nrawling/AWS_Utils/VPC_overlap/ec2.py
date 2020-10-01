@@ -16,8 +16,16 @@ class ElasticComputeCloud:
 
     def get_regions(self):
         """Get available regions for current profile."""
-        return [{'RegionName': region['RegionName']}
-                for region in self.ecc.describe_regions()['Regions']]
+        # https://docs.aws.amazon.com/general/latest/gr/rande-manage.html
+        # aws ec2 describe-regions --all-regions --region us-east-1
+        # "OptInStatus": "opt-in-not-required"
+        regions = self.ecc.describe_regions()['Regions']
+
+        for reg in regions: 
+            if(reg['OptInStatus'] == 'not-opted-in'):
+                regions.remove(reg)
+
+        return(regions)
 
     def get_vpcs(self):
         """Get VPCs for current profile."""
